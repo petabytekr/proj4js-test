@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Gcensoft Transform Test</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="proj4js-combined.js"></script>
+
+</head>
+
+<script type="text/javascript">
+    function transform() {
+        var srcX = document.getElementById("srcX");
+        var srcY = document.getElementById("srcY");
+        var destX = document.getElementById("destX");
+        var destY = document.getElementById("destY");
+
+        Proj4js.reportError = function (msg) {
+            alert("Error : " + msg);
+        }
+        Proj4js.defs["EPSG:4326"] = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+        Proj4js.defs["EPSG:4301"] = "+proj=longlat +ellps=bessel +towgs84=-146.43,507.89,681.46 +no_defs";
+        Proj4js.defs["EPSG:4162"] =
+            "+proj=longlat +ellps=bessel +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43 +no_defs";
+
+        var wgs84 = new Proj4js.Proj("EPSG:4326");
+        var bessel = new Proj4js.Proj("EPSG:4162");
+
+        var p = new Proj4js.Point(srcX.value, srcY.value);
+        Proj4js.transform(wgs84, bessel, p);
+
+        destX.value = p.x;
+        destY.value = p.y;
+
+    }
+</script>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <th>입력 좌표</th>
+                <th></th>
+                <th>출력 좌표</th>
+            </tr>
+            <tr>
+                <td>
+                    <input name="srcX" id="srcX" type="text" />
+                    <input name="srcY" id="srcY" type="text" />
+                </td>
+                <td>
+                    <input type="button" value="변환" onclick="transform();" />
+                </td>
+                <td>
+                    <input name="destX" id="destX" type="text" />
+                    <input name="destY" id="destY" type="text" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
