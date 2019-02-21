@@ -20,16 +20,26 @@
         Proj4js.reportError = function (msg) {
             alert("Error : " + msg);
         }
+
+        // WGS84 경위도: GPS가 사용하는 좌표계
         Proj4js.defs["EPSG:4326"] = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+
+        // Bessel
         Proj4js.defs["EPSG:4301"] = "+proj=longlat +ellps=bessel +towgs84=-146.43,507.89,681.46 +no_defs";
+        
+        // Bessel 1841 경위도: 한국과 일본에 잘 맞는 지역타원체를 사용한 좌표계
         Proj4js.defs["EPSG:4162"] =
             "+proj=longlat +ellps=bessel +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43 +no_defs";
 
+        // 네비게이션용 KATEC 좌표계(KOTI-KATEC)
+        Proj4js.defs["KATEC"] = "+proj=tmerc +lat_0=38 +lon_0=128 +k=0.9999 +x_0=400000 +y_0=600000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43";
+
         var wgs84 = new Proj4js.Proj("EPSG:4326");
         var bessel = new Proj4js.Proj("EPSG:4162");
+        var katec = new Proj4js.Proj("KATEC");
 
         var p = new Proj4js.Point(srcX.value, srcY.value);
-        Proj4js.transform(wgs84, bessel, p);
+        Proj4js.transform(wgs84, katec, p);
 
         destX.value = p.x;
         destY.value = p.y;
